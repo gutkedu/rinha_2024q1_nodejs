@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=gym_api
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: '200MB'
+
+volumes:
+  postgres:
