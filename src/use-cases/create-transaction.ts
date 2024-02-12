@@ -4,6 +4,7 @@ import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
+import { ulid } from 'ulid'
 
 interface CreateTransactionRequest {
   value: number
@@ -42,10 +43,11 @@ export class CreateTransactionUseCase {
     }
 
     const transaction = TransactionEntity.create({
-      costumerId,
+      costumerId: costumer.id,
       description,
       transactionType,
       value,
+      id: ulid(),
     })
 
     await Promise.all([

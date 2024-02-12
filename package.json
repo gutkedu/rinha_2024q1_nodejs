@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/pg": "8.11.0",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "eslint": "^8.56.0",
@@ -29,7 +30,9 @@
   "dependencies": {
     "dayjs": "^1.11.10",
     "dotenv": "16.4.2",
+    "drizzle-orm": "0.29.3",
     "fastify": "^4.26.0",
+    "pg": "8.11.3",
     "ulid": "2.3.0",
     "zod": "^3.22.4"
   }

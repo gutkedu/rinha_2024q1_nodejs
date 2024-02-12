@@ -1,11 +1,13 @@
+import { CostumerSelect } from '@drizzle/schema/costumer'
 import { Entity } from './entity'
+import { ulid } from 'ulid'
 
-interface CostumerProps {
-  limit: number
-  balance: number
-}
+interface CostumerProps extends CostumerSelect {}
 
 export class CostumerEntity extends Entity<CostumerProps> {
+  get id() {
+    return this.props.id
+  }
   get limit() {
     return this.props.limit
   }
@@ -22,7 +24,10 @@ export class CostumerEntity extends Entity<CostumerProps> {
     this.props.balance = balance
   }
 
-  static create(props: CostumerProps, id?: string) {
-    return new CostumerEntity(props, id)
+  static create(props: CostumerProps) {
+    return new CostumerEntity({
+      ...props,
+      id: props.id ?? ulid(),
+    })
   }
 }

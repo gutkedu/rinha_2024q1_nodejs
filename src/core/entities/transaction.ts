@@ -1,16 +1,14 @@
-import { TransactionType } from '@/core/types/transaction-type'
 import { Entity } from './entity'
 import { Optional } from '../types/optional'
+import { TransactionSelect } from '@drizzle/schema/transaction'
+import { ulid } from 'ulid'
 
-interface TransactionProps {
-  value: number
-  transactionType: TransactionType
-  description: string
-  costumerId: string
-  createdAt: Date
-}
+interface TransactionProps extends TransactionSelect {}
 
 export class TransactionEntity extends Entity<TransactionProps> {
+  get id() {
+    return this.props.id
+  }
   get value() {
     return this.props.value
   }
@@ -31,7 +29,11 @@ export class TransactionEntity extends Entity<TransactionProps> {
     return this.props.createdAt
   }
 
-  static create(props: Optional<TransactionProps, 'createdAt'>, id?: string) {
-    return new TransactionEntity({ ...props, createdAt: new Date() }, id)
+  static create(props: Optional<TransactionProps, 'createdAt'>) {
+    return new TransactionEntity({
+      ...props,
+      id: props.id ?? ulid(),
+      createdAt: props.createdAt ?? new Date(),
+    })
   }
 }

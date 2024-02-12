@@ -1,10 +1,10 @@
 import { it, expect, beforeEach, describe } from 'vitest'
 import { CreateTransactionUseCase } from './create-transaction'
-import { InMemoryTransactionRepository } from 'test/in-memory/in-memory-transaction-repository'
-import { InMemoryCostumerRepository } from 'test/in-memory/in-memory-costumer-repository'
 import { TransactionType } from '@/core/types/transaction-type'
 import { NotFoundError } from './errors/not-found-error'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
+import { InMemoryCostumerRepository } from '@test/in-memory/in-memory-costumer-repository'
+import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transaction-repository'
 
 let costumerRepository: InMemoryCostumerRepository
 let transactionRepository: InMemoryTransactionRepository

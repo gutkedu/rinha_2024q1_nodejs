@@ -1,9 +1,9 @@
 import { it, expect, beforeEach, describe } from 'vitest'
 import { FetchCostumerExtractUseCase } from './fetch-costumer-extract'
-import { InMemoryCostumerRepository } from 'test/in-memory/in-memory-costumer-repository'
-import { InMemoryTransactionRepository } from 'test/in-memory/in-memory-transaction-repository'
 import { TransactionType } from '@/core/types/transaction-type'
 import { TransactionEntity } from '@/core/entities/transaction'
+import { InMemoryCostumerRepository } from '@test/in-memory/in-memory-costumer-repository'
+import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transaction-repository'
 
 let transactionRepository: InMemoryTransactionRepository
 let costumerRepository: InMemoryCostumerRepository
@@ -26,6 +26,7 @@ describe('Fetch Costumer Extract', () => {
     for (let i = 0; i < 15; i++) {
       transactionRepository.create(
         TransactionEntity.create({
+          id: i.toString(),
           costumerId: costumer.id,
           description: 'Test',
           transactionType: TransactionType.DEBIT,

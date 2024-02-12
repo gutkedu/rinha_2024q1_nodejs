@@ -6,11 +6,11 @@ export class InMemoryCostumerRepository implements CostumerRepository {
 
   constructor() {
     this.items = [
-      CostumerEntity.create({ limit: 100000, balance: 0 }, '1'),
-      CostumerEntity.create({ limit: 80000, balance: 0 }, '2'),
-      CostumerEntity.create({ limit: 1000000, balance: 0 }, '3'),
-      CostumerEntity.create({ limit: 10000000, balance: 0 }, '4'),
-      CostumerEntity.create({ limit: 500000, balance: 0 }, '5'),
+      CostumerEntity.create({ id: '1', limit: 100000, balance: 0 }),
+      CostumerEntity.create({ id: '2', limit: 80000, balance: 0 }),
+      CostumerEntity.create({ id: '3', limit: 1000000, balance: 0 }),
+      CostumerEntity.create({ id: '4', limit: 10000000, balance: 0 }),
+      CostumerEntity.create({ id: '5', limit: 500000, balance: 0 }),
     ]
   }
   async updateBalance(
