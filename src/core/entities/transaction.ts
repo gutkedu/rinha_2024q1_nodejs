@@ -29,6 +29,10 @@ export class TransactionEntity extends Entity<TransactionProps> {
     return this.props.createdAt
   }
 
+  static fromDatabase(input: TransactionSelect) {
+    return new TransactionEntity(input)
+  }
+
   static create(props: Optional<TransactionProps, 'createdAt'>) {
     return new TransactionEntity({
       ...props,

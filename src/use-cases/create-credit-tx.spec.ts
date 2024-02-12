@@ -1,30 +1,25 @@
 import { it, expect, beforeEach, describe } from 'vitest'
-import { CreateTransactionUseCase } from './create-transaction'
-import { TransactionType } from '@/core/types/transaction-type'
 import { NotFoundError } from './errors/not-found-error'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 import { InMemoryCostumerRepository } from '@test/in-memory/in-memory-costumer-repository'
 import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transaction-repository'
+import { CreateCreditTxUseCase } from './create-credit-tx'
 
 let costumerRepository: InMemoryCostumerRepository
 let transactionRepository: InMemoryTransactionRepository
-let sut: CreateTransactionUseCase
+let sut: CreateCreditTxUseCase
 
 describe('Create Transaction', () => {
   beforeEach(() => {
     costumerRepository = new InMemoryCostumerRepository()
     transactionRepository = new InMemoryTransactionRepository()
-    sut = new CreateTransactionUseCase(
-      costumerRepository,
-      transactionRepository,
-    )
+    sut = new CreateCreditTxUseCase(costumerRepository, transactionRepository)
   })
 
   it('should create a transaction', async () => {
     const response = await sut.execute({
       costumerId: '1',
       description: 'Test',
-      transactionType: TransactionType.DEBIT,
       value: 1000,
     })
 
@@ -39,7 +34,6 @@ describe('Create Transaction', () => {
       sut.execute({
         costumerId: 'not-found',
         description: 'Test',
-        transactionType: TransactionType.DEBIT,
         value: 1000,
       }),
     ).rejects.toThrow(NotFoundError)
@@ -50,7 +44,6 @@ describe('Create Transaction', () => {
       sut.execute({
         costumerId: '1',
         description: 'Test',
-        transactionType: TransactionType.DEBIT,
         value: 999999999999,
       }),
     ).rejects.toThrow(InconsistentBalanceError)

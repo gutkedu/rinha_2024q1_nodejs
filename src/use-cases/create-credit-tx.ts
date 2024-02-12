@@ -6,19 +6,18 @@ import { TransactionEntity } from '@/core/entities/transaction'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 import { ulid } from 'ulid'
 
-interface CreateTransactionRequest {
+interface CreateCreditTxRequest {
   value: number
-  transactionType: TransactionType
   description: string
   costumerId: string
 }
 
-interface CreateTransactionResponse {
+interface CreateCreditTxResponse {
   limit: number
   balance: number
 }
 
-export class CreateTransactionUseCase {
+export class CreateCreditTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
     private readonly transactionRepository: TransactionRepository,
@@ -27,9 +26,8 @@ export class CreateTransactionUseCase {
   async execute({
     costumerId,
     description,
-    transactionType,
     value,
-  }: CreateTransactionRequest): Promise<CreateTransactionResponse> {
+  }: CreateCreditTxRequest): Promise<CreateCreditTxResponse> {
     const costumer = await this.costumerRepository.findById(costumerId)
 
     if (!costumer) {
@@ -45,7 +43,7 @@ export class CreateTransactionUseCase {
     const transaction = TransactionEntity.create({
       costumerId: costumer.id,
       description,
-      transactionType,
+      transactionType: TransactionType.CREDIT,
       value,
       id: ulid(),
     })

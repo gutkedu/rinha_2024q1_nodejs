@@ -1,5 +1,6 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { makeCreateTransactionUseCase } from '@/use-cases/factories/make-create-transaction'
+import { makeCreateCreditTxUseCase } from '@/use-cases/factories/make-credit-tx'
+import { makeCreateDebitTxUseCase } from '@/use-cases/factories/make-debit-tx'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
@@ -17,9 +18,9 @@ export async function createTransactionController(
   })
 
   const createTransactionBodySchema = z.object({
-    valor: z.number(),
+    valor: z.number().positive().int(),
     tipo: z.nativeEnum(TransactionType),
-    descricao: z.string(),
+    descricao: z.string().min(1).max(10),
   })
 
   const { id: costumerId } = createTransactionParamsSchema.parse(request.params)
@@ -29,17 +30,33 @@ export async function createTransactionController(
     descricao: description,
   } = createTransactionBodySchema.parse(request.body)
 
-  const useCase = makeCreateTransactionUseCase()
+  if (transactionType === TransactionType.CREDIT) {
+    const useCase = makeCreateCreditTxUseCase()
 
-  const { balance, limit } = await useCase.execute({
-    costumerId,
-    description,
-    transactionType,
-    value,
-  })
+    const { balance, limit } = await useCase.execute({
+      costumerId,
+      description,
+      value,
+    })
 
-  reply.status(200).send({
-    saldo: balance,
-    limite: limit,
-  } as createTransactionOutput)
+    reply.status(200).send({
+      saldo: balance,
+      limite: limit,
+    } as createTransactionOutput)
+  } else if (transactionType === TransactionType.DEBIT) {
+    const useCase = makeCreateDebitTxUseCase()
+
+    const { balance, limit } = await useCase.execute({
+      costumerId,
+      description,
+      value,
+    })
+
+    reply.status(200).send({
+      saldo: balance,
+      limite: limit,
+    } as createTransactionOutput)
+  } else {
+    reply.status(400).send('Invalid transaction type.')
+  }
 }
