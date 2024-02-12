@@ -3,7 +3,7 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 
 console.log('Migrating...')
 
-await migrate(db, { migrationsFolder: './drizzle' })
+await migrate(db, { migrationsFolder: './drizzle/migrations' })
 
 console.log('Migration finished successfully! ✅')
 

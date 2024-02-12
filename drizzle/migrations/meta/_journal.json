@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1707749700995,
+      "tag": "0000_sudden_centennial",
+      "breakpoints": true
+    }
+  ]
+}
