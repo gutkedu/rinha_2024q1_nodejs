@@ -1,5 +1,5 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { makeFetchCostumerExtractUseCase } from '@/use-cases/factories/make-fetch-costumer-extract.spec'
+import { makeFetchCostumerExtractUseCase } from '@/use-cases/factories/make-fetch-costumer-extract'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 

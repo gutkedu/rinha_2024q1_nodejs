@@ -16,17 +16,18 @@ describe('Create Transaction', () => {
     sut = new CreateCreditTxUseCase(costumerRepository, transactionRepository)
   })
 
-  it('should create a transaction', async () => {
+  it('should create a credit transaction', async () => {
+    const value = 1000
     const response = await sut.execute({
       costumerId: '1',
       description: 'Test',
-      value: 1000,
+      value,
     })
 
     const findCostumer = await costumerRepository.findById('1')
 
     expect(response.limit).toBe(findCostumer.limit)
-    expect(response.balance).toBe(findCostumer.balance)
+    expect(response.balance).toBe(value * -1)
   })
 
   it('should not create a transaction when costumer is not found', async () => {
