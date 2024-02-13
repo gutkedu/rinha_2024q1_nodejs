@@ -27,6 +27,9 @@ jobs:
       
       - run: npm ci
 
+      - name: Wait for PostgreSQL to become ready
+        run: sleep 10
+
       - run: npm run db:migrate
 
       - run: npm run db:seed
