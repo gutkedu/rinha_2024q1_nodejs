@@ -11,7 +11,7 @@ RUN npm run build
 FROM node:20-alpine
 
 WORKDIR /app
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/build ./build
 COPY package.json package-lock.json ./
 RUN npm ci --only=production
 

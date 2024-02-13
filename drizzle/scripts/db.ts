@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 function createPostgresConnectionString() {
-  const host = process.env.DB_HOST
+  const host = process.env.DB_HOST 
   const port = process.env.DB_PORT || '5432'
   const user = process.env.DB_USER
   const password = process.env.DB_PASSWORD
