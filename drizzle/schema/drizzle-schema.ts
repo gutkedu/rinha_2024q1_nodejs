@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import {
   index,
   integer,
@@ -5,7 +6,6 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
-import { costumerSchema } from './costumer'
 
 export const transactionSchema = pgTable(
   'transactions',
@@ -22,5 +22,25 @@ export const transactionSchema = pgTable(
   }),
 )
 
+export const transactionRelations = relations(transactionSchema, ({ one }) => ({
+  costumer: one(costumerSchema, {
+    fields: [transactionSchema.costumerId],
+    references: [costumerSchema.id],
+  }),
+}))
+
 export type TransactionInsert = typeof transactionSchema.$inferInsert
 export type TransactionSelect = typeof transactionSchema.$inferSelect
+
+export const costumerSchema = pgTable('costumers', {
+  id: varchar('id').primaryKey(),
+  limit: integer('limit').default(0).notNull(),
+  balance: integer('balance').default(0).notNull(),
+})
+
+export const costumerRelations = relations(transactionSchema, ({ many }) => ({
+  transactions: many(transactionSchema),
+}))
+
+export type CostumerInsert = typeof costumerSchema.$inferInsert
+export type CostumerSelect = typeof costumerSchema.$inferSelect

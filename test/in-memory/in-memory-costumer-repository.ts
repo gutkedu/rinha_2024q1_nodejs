@@ -1,5 +1,5 @@
 import { CostumerEntity } from '@/core/entities/costumer'
-import { CostumerRepository } from '@/repositories/costumer-respository'
+import { CostumerRepository } from '@/repositories/costumer-repository'
 
 export class InMemoryCostumerRepository implements CostumerRepository {
   public items: CostumerEntity[] = []

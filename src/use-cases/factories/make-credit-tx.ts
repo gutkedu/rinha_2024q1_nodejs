@@ -1,9 +1,9 @@
-import { InMemoryCostumerRepository } from '@test/in-memory/in-memory-costumer-repository'
-import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transaction-repository'
+import { DrizzleTransactionRepository } from '@/repositories/drizzle/drizzle-transaction-repository'
 import { CreateCreditTxUseCase } from '../create-credit-tx'
+import { DrizzleCostumerRepository } from '@/repositories/drizzle/drizzle-costumer-repository'
 
 export function makeCreateCreditTxUseCase() {
-  const costumerRepository = new InMemoryCostumerRepository()
-  const transactionRepository = new InMemoryTransactionRepository()
+  const costumerRepository = new DrizzleCostumerRepository()
+  const transactionRepository = new DrizzleTransactionRepository()
   return new CreateCreditTxUseCase(costumerRepository, transactionRepository)
 }

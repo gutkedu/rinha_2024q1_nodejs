@@ -1,4 +1,4 @@
-import { CostumerSelect } from '@drizzle/schema/costumer'
+import { CostumerSelect } from '@drizzle/schema/drizzle-schema'
 import { Entity } from './entity'
 import { ulid } from 'ulid'
 

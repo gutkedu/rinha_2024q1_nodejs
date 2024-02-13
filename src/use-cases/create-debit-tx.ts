@@ -1,9 +1,9 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { CostumerRepository } from '@/repositories/costumer-respository'
 import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { ulid } from 'ulid'
+import { CostumerRepository } from '@/repositories/costumer-repository'
 
 interface CreateDebitTxRequest {
   value: number

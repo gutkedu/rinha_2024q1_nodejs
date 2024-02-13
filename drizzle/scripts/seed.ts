@@ -1,11 +1,13 @@
-import { transactionSchema } from '@drizzle/schema/transaction'
-import { client, db } from './db'
-import { costumerSchema } from '@drizzle/schema/costumer'
+import {
+  costumerSchema,
+  transactionSchema,
+} from '@drizzle/schema/drizzle-schema'
+import { client, scriptDb } from './db'
 
 console.log('Delete existing data...')
 try {
-  await db.delete(transactionSchema)
-  await db.delete(costumerSchema)
+  await scriptDb.delete(transactionSchema)
+  await scriptDb.delete(costumerSchema)
 } catch (err) {
   console.log(err)
   console.log('Could not delete existing existing data ❌')
@@ -15,7 +17,7 @@ try {
 
 console.log('Checking if data was already created...')
 try {
-  const result = await db.select().from(costumerSchema)
+  const result = await scriptDb.select().from(costumerSchema)
   if (result.length) {
     console.log('Database already have data, skipping! 👋')
     await client.end()
@@ -30,7 +32,7 @@ try {
 
 console.log('Database is empty, inserting initial data...')
 try {
-  await db.insert(costumerSchema).values([
+  await scriptDb.insert(costumerSchema).values([
     { id: '1', limit: 100000, balance: 0 },
     { id: '2', limit: 80000, balance: 0 },
     { id: '3', limit: 1000000, balance: 0 },

@@ -1,9 +1,15 @@
-import { db, client } from './db'
+import { scriptDb, client } from './db'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 
 console.log('Migrating...')
 
-await migrate(db, { migrationsFolder: './drizzle/migrations' })
+const defaultSchema = 'public'
+
+await client.query(`CREATE SCHEMA IF NOT EXISTS "${defaultSchema}"`)
+
+await client.query(`SET SCHEMA '${defaultSchema}'`)
+
+await migrate(scriptDb, { migrationsFolder: './drizzle/migrations' })
 
 console.log('Migration finished successfully! ✅')
 

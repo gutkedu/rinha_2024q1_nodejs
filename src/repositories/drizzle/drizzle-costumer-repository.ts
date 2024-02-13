@@ -1,9 +1,9 @@
 import { CostumerEntity } from '@/core/entities/costumer'
-import { CostumerRepository } from '../costumer-respository'
+import { CostumerRepository } from '../costumer-repository'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
-import { db } from '@/lib/drizzle'
-import { costumerSchema } from '@drizzle/schema/costumer'
 import { eq } from 'drizzle-orm'
+import { costumerSchema } from '@drizzle/schema/drizzle-schema'
+import { db } from '@/app'
 
 export class DrizzleCostumerRepository implements CostumerRepository {
   private db: NodePgDatabase

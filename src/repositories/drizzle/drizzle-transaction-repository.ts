@@ -1,10 +1,10 @@
 import { TransactionEntity } from '@/core/entities/transaction'
 import { TransactionRepository } from '../transaction-repository'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
-import { db } from '@drizzle/scripts/db'
-import { transactionSchema } from '@drizzle/schema/transaction'
 import { IntegrationError } from '@/shared/errors/integration-error'
 import { desc, eq } from 'drizzle-orm'
+import { transactionSchema } from '@drizzle/schema/drizzle-schema'
+import { db } from '@/app'
 
 export class DrizzleTransactionRepository implements TransactionRepository {
   private db: NodePgDatabase

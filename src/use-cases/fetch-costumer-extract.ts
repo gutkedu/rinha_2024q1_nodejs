@@ -1,6 +1,6 @@
-import { CostumerRepository } from '@/repositories/costumer-respository'
 import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
+import { CostumerRepository } from '@/repositories/costumer-repository'
 
 interface FetchCostumerExtractRequest {
   costumerId: string
@@ -48,9 +48,11 @@ export class FetchCostumerExtractUseCase {
       },
       lastTransactions: lastTransactions.map((transaction) => ({
         value: transaction.value,
-        transactionType: transaction.transactionType,
-        description: transaction.description,
-        createdAt: transaction.createdAt.toISOString(),
+        transactionType: transaction.transactionType ?? '',
+        description: transaction.description ?? '',
+        createdAt: transaction.createdAt
+          ? transaction.createdAt.toISOString()
+          : '',
       })),
     }
   }

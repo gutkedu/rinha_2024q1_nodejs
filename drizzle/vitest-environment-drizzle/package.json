@@ -1,0 +1,8 @@
+{
+  "name": "vitest-environment-drizzle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "drizzle-test-environment.ts",
+  "author": "",
+  "license": "ISC"
+}

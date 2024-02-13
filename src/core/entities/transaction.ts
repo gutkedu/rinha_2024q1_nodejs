@@ -1,7 +1,7 @@
 import { Entity } from './entity'
 import { Optional } from '../types/optional'
-import { TransactionSelect } from '@drizzle/schema/transaction'
 import { ulid } from 'ulid'
+import { TransactionSelect } from '@drizzle/schema/drizzle-schema'
 
 interface TransactionProps extends TransactionSelect {}
 

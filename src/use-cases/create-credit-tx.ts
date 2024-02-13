@@ -1,10 +1,10 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { CostumerRepository } from '@/repositories/costumer-respository'
 import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 import { ulid } from 'ulid'
+import { CostumerRepository } from '@/repositories/costumer-repository'
 
 interface CreateCreditTxRequest {
   value: number
@@ -44,13 +44,13 @@ export class CreateCreditTxUseCase {
       costumerId: costumer.id,
       description,
       transactionType: TransactionType.CREDIT,
-      value,
+      value: -value,
       id: ulid(),
     })
 
     await Promise.all([
       this.transactionRepository.create(transaction),
-      this.costumerRepository.updateBalance(costumer, value),
+      this.costumerRepository.updateBalance(costumer, -value),
     ])
 
     return {

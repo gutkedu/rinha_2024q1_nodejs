@@ -2,12 +2,31 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { env } from '@/env'
 
-const pool = new pg.Pool({
-  host: env.DB_HOST,
-  port: parseInt(`${env.DB_PORT || '5432'}`),
-  user: env.DB_USER,
-  password: env.DB_PASSWORD,
-  database: env.DB_NAME,
-})
+function createPostgresConnectionString() {
+  const host = env.DB_HOST
+  const port = env.DB_PORT
+  const user = env.DB_USER
+  const password = env.DB_PASSWORD
+  const database = env.DB_NAME
 
-export const db = drizzle(pool)
+  const url = new URL(
+    `postgresql://${user}:${password}@${host}:${port}/${database}`,
+  )
+
+  return url.toString()
+}
+
+export async function startDatabase() {
+  const pool = new pg.Pool({
+    connectionString: createPostgresConnectionString(),
+  })
+
+  if (process.env.DB_SCHEMA) {
+    await pool.query(`CREATE SCHEMA IF NOT EXISTS "${process.env.DB_SCHEMA}"`)
+    await pool.query(`SET SCHEMA '${process.env.DB_SCHEMA}'`)
+  }
+
+  const db = drizzle(pool)
+
+  return db
+}
