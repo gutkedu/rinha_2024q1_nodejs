@@ -36,10 +36,10 @@ jobs:
 
       - run: npm run test:e2e
         env:
-            NODE_ENV: dev
+            NODE_ENV: "dev"
             PORT: 3333
             DB_PORT: 5432
-            DB_HOST: 'localhost'
-            DB_USER: docker
-            DB_PASSWORD: docker
-            DB_NAME: rinha_api
+            DB_HOST: "localhost"
+            DB_USER: "docker"
+            DB_PASSWORD: "docker"
+            DB_NAME: "rinha_api"
