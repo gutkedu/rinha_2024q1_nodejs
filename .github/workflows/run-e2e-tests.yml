@@ -1,0 +1,38 @@
+name: Run E2E Tests
+
+on: [pull_request]
+
+jobs: 
+  run-e2e-tests:
+    name: E2E test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: bitnami/postgresql
+        ports:
+          - 5432:5432
+        env:
+          POSTGRESQL_USERNAME: docker
+          POSTGRESQL_PASSWORD: docker
+          POSTGRESQL_DATABASE: rinha_api
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      
+      - run: npm ci
+
+      - run: npm run test:e2e
+        env:
+            NODE_ENV: "dev"
+            PORT: 3333
+            DB_PORT: 5432
+            DB_HOST: "localhost"
+            DB_USER: "docker"
+            DB_PASSWORD: "docker"
+            DB_NAME: "rinha_api"
