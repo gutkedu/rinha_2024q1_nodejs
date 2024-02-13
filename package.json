@@ -9,7 +9,7 @@
   "license": "ISC",
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
-    "start": "node build/server.mjs",
+    "start": "node build/server.js",
     "lint": "eslint src --ext .ts .",
     "lint:fix": "eslint src --ext .ts --fix",
     "prebuild": "tsc --noEmit",
