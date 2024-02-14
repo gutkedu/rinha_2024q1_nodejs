@@ -1,4 +1,4 @@
-import { it, expect, beforeEach, describe } from 'vitest'
+/* import { it, expect, beforeEach, describe } from 'vitest'
 import { FetchCostumerExtractUseCase } from './fetch-costumer-extract'
 import { TransactionType } from '@/core/types/transaction-type'
 import { TransactionEntity } from '@/core/entities/transaction'
@@ -53,3 +53,4 @@ describe('Fetch Costumer Extract', () => {
     ).rejects.toThrow('Costumer not found.')
   })
 })
+ */

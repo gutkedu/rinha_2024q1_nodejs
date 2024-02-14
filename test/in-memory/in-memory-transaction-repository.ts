@@ -10,25 +10,16 @@ export class InMemoryTransactionRepository implements TransactionRepository {
     this.items = []
     this.costumerRepository = new InMemoryCostumerRepository()
   }
-
-  async create(data: TransactionEntity): Promise<TransactionEntity> {
-    this.items.push(data)
-    return data
+  async create(transaction: TransactionEntity): Promise<TransactionEntity> {
+    this.items.push(transaction)
+    return transaction
   }
 
   async findLast10TransactionsByCostumerId(
-    costumerId: string,
+    costumerId: number,
   ): Promise<TransactionEntity[]> {
     return this.items
       .filter((item) => item.costumerId === costumerId)
       .slice(-10)
-  }
-
-  async createTransactionAndUpdateBalance(
-    costumerId: string,
-    balance: number,
-    transaction: TransactionEntity,
-  ): Promise<void> {
-    this.items.push(transaction)
   }
 }

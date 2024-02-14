@@ -3,7 +3,7 @@ import { NotFoundError } from './errors/not-found-error'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 
 interface FetchCostumerExtractRequest {
-  costumerId: string
+  costumerId: number
 }
 
 interface FetchCostumerExtractResponse {
@@ -29,9 +29,10 @@ export class FetchCostumerExtractUseCase {
   async execute({
     costumerId,
   }: FetchCostumerExtractRequest): Promise<FetchCostumerExtractResponse> {
-    const costumer = await this.costumerRepository.findById(costumerId)
+    const { balance, costumer } =
+      await this.costumerRepository.findById(costumerId)
 
-    if (!costumer) {
+    if (!costumer || !balance) {
       throw new NotFoundError('Costumer not found.')
     }
 
@@ -42,7 +43,7 @@ export class FetchCostumerExtractUseCase {
 
     return {
       balance: {
-        total: costumer.balance,
+        total: balance.value,
         extractDate: new Date().toISOString(),
         limit: costumer.limit,
       },

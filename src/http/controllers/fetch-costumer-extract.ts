@@ -32,7 +32,7 @@ export async function fetchCostumerExtractController(
   const useCase = makeFetchCostumerExtractUseCase()
 
   const { balance, lastTransactions } = await useCase.execute({
-    costumerId: costumerId.toString(),
+    costumerId,
   })
 
   reply.status(200).send({

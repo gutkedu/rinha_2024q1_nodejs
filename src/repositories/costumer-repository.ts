@@ -1,6 +1,9 @@
+import { BalanceEntity } from '@/core/entities/balance'
 import { CostumerEntity } from '@/core/entities/costumer'
 
 export interface CostumerRepository {
-  findById(costumerId: string): Promise<CostumerEntity | null>
-  updateBalance(costumerId: string, balance: number): Promise<void>
+  findById(costumerId: number): Promise<{
+    costumer: CostumerEntity | null
+    balance: BalanceEntity | null
+  }>
 }

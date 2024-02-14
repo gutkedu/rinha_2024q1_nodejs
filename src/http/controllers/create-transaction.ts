@@ -14,7 +14,7 @@ export async function createTransactionController(
   reply: FastifyReply,
 ) {
   const createTransactionParamsSchema = z.object({
-    id: z.string(),
+    id: z.coerce.number().nonnegative(),
   })
 
   const createTransactionBodySchema = z.object({

@@ -1,6 +1,5 @@
 import { CostumerSelect } from '@drizzle/schema/drizzle-schema'
 import { Entity } from './entity'
-import { ulid } from 'ulid'
 
 interface CostumerProps extends CostumerSelect {}
 
@@ -12,22 +11,21 @@ export class CostumerEntity extends Entity<CostumerProps> {
     return this.props.limit
   }
 
+  get name() {
+    return this.props.name
+  }
+
   set limit(limit: number) {
     this.props.limit = limit
   }
 
-  get balance() {
-    return this.props.balance
-  }
-
-  set balance(balance: number) {
-    this.props.balance = balance
+  static fromDatabase(input: CostumerSelect) {
+    return new CostumerEntity(input)
   }
 
   static create(props: CostumerProps) {
     return new CostumerEntity({
       ...props,
-      id: props.id ?? ulid(),
     })
   }
 }

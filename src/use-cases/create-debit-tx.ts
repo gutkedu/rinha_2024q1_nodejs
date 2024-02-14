@@ -1,14 +1,16 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
+import { TransactionRepository } from '@/repositories/transaction-repository'
+import { BalanceRepository } from '@/repositories/balance-repository'
+import { DbTxRepository } from '@/repositories/db-tx-repository'
 
 interface CreateDebitTxRequest {
   value: number
   description: string
-  costumerId: string
+  costumerId: number
 }
 
 interface CreateDebitTxResponse {
@@ -19,7 +21,9 @@ interface CreateDebitTxResponse {
 export class CreateDebitTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
+    private readonly balanceRepository: BalanceRepository,
     private readonly transactionRepository: TransactionRepository,
+    private readonly dbTxRepository: DbTxRepository,
   ) {}
 
   async execute({
@@ -27,13 +31,14 @@ export class CreateDebitTxUseCase {
     description,
     value,
   }: CreateDebitTxRequest): Promise<CreateDebitTxResponse> {
-    const costumer = await this.costumerRepository.findById(costumerId)
+    const { balance, costumer } =
+      await this.costumerRepository.findById(costumerId)
 
-    if (!costumer) {
+    if (!costumer || !balance) {
       throw new NotFoundError('Costumer not found.')
     }
 
-    const isInconsistentBalance = costumer.balance - value < -costumer.limit
+    const isInconsistentBalance = balance.value - value < -costumer.limit
 
     if (isInconsistentBalance) {
       throw new InconsistentBalanceError('Limit exceeded.')
@@ -48,13 +53,20 @@ export class CreateDebitTxUseCase {
       value: debitValue,
     })
 
-    const newBalance = costumer.balance + debitValue
+    const newBalance = balance.value - value
 
-    await this.transactionRepository.createTransactionAndUpdateBalance(
+    await this.dbTxRepository.createTxAndUpdateCostumerBalance({
+      costumerId: costumer.id,
+      tx: transaction,
+      balanceValue: newBalance,
+    })
+
+    /*     await this.transactionRepository.create(transaction)
+
+    await this.balanceRepository.updateBalanceByCostumerId(
       costumer.id,
       newBalance,
-      transaction,
-    )
+    ) */
 
     return {
       limit: costumer.limit,

@@ -1,32 +1,81 @@
 {
-  "id": "a67869f3-98a3-4929-8dfd-9c9f66a2fefd",
+  "id": "d7cee62a-7a7d-410e-9e36-0dca9e8b22a4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "balances": {
+      "name": "balances",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "costumerId": {
+          "name": "costumerId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "costumerBalanceIdx": {
+          "name": "costumerBalanceIdx",
+          "columns": [
+            "costumerId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "balances_costumerId_costumers_id_fk": {
+          "name": "balances_costumerId_costumers_id_fk",
+          "tableFrom": "balances",
+          "tableTo": "costumers",
+          "columnsFrom": [
+            "costumerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "costumers": {
       "name": "costumers",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar",
+          "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
           "notNull": true
         },
         "limit": {
           "name": "limit",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "balance": {
-          "name": "balance",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
+          "notNull": true
         }
       },
       "indexes": {},
@@ -46,7 +95,7 @@
         },
         "costumerId": {
           "name": "costumerId",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -78,8 +127,8 @@
         }
       },
       "indexes": {
-        "costumerIdIdx": {
-          "name": "costumerIdIdx",
+        "costumerTransactionIdx": {
+          "name": "costumerTransactionIdx",
           "columns": [
             "costumerId"
           ],
