@@ -3,6 +3,7 @@ import { NotFoundError } from './errors/not-found-error'
 import { InMemoryCostumerRepository } from '@test/in-memory/in-memory-costumer-repository'
 import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transaction-repository'
 import { CreateDebitTxUseCase } from './create-debit-tx'
+import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 
 let costumerRepository: InMemoryCostumerRepository
 let transactionRepository: InMemoryTransactionRepository
@@ -26,7 +27,7 @@ describe('Create Transaction', () => {
     const findCostumer = await costumerRepository.findById('1')
 
     expect(response.limit).toBe(findCostumer.limit)
-    expect(response.balance).toBe(value)
+    expect(response.balance).toBe(-value)
   })
 
   it('should not create a transaction when costumer is not found', async () => {
@@ -37,5 +38,15 @@ describe('Create Transaction', () => {
         value: 1000,
       }),
     ).rejects.toThrow(NotFoundError)
+  })
+
+  it('should not create a transaction when balance is inconsistent', async () => {
+    await expect(
+      sut.execute({
+        costumerId: '1',
+        description: 'Test',
+        value: 999999999999,
+      }),
+    ).rejects.toThrow(InconsistentBalanceError)
   })
 })

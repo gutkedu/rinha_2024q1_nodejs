@@ -6,9 +6,9 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3333),
   DB_PORT: z.coerce.number().default(5432),
   DB_HOST: z.string().default('localhost'),
-  DB_USER: z.string().default('postgres'),
-  DB_PASSWORD: z.string().default('postgres'),
-  DB_NAME: z.string().default('rinha'),
+  DB_USER: z.string().default('docker'),
+  DB_PASSWORD: z.string().default('docker'),
+  DB_NAME: z.string().default('rinha_api'),
   DB_SCHEMA: z.string().default('public'),
 })
 

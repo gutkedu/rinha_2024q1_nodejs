@@ -3,6 +3,8 @@ import { ZodError } from 'zod'
 import { env } from './env'
 import { transactionRoutes } from './http/controllers/routes'
 import { startDatabase } from './lib/drizzle'
+import { InconsistentBalanceError } from './use-cases/errors/inconsistent-balance-error'
+import { NotFoundError } from './use-cases/errors/not-found-error'
 
 export const app = fastify()
 
@@ -12,9 +14,21 @@ export const db = await startDatabase()
 
 app.setErrorHandler((error, _request, reply) => {
   if (error instanceof ZodError) {
-    return reply.status(400).send({
+    return reply.status(422).send({
       message: 'Validation error.',
       issues: error.format(),
+    })
+  }
+
+  if (error instanceof InconsistentBalanceError) {
+    return reply.status(422).send({
+      message: error.message,
+    })
+  }
+
+  if (error instanceof NotFoundError) {
+    return reply.status(404).send({
+      message: error.message,
     })
   }
 

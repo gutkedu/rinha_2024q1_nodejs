@@ -4,6 +4,7 @@ import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { ulid } from 'ulid'
 import { CostumerRepository } from '@/repositories/costumer-repository'
+import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 
 interface CreateDebitTxRequest {
   value: number
@@ -33,17 +34,25 @@ export class CreateDebitTxUseCase {
       throw new NotFoundError('Costumer not found.')
     }
 
+    const isInconsistentBalance = costumer.balance - value < -costumer.limit
+
+    if (isInconsistentBalance) {
+      throw new InconsistentBalanceError('Limit exceeded.')
+    }
+
+    const debitValue = -value
+
     const transaction = TransactionEntity.create({
       costumerId: costumer.id,
       description,
       transactionType: TransactionType.DEBIT,
-      value,
+      value: debitValue,
       id: ulid(),
     })
 
     await Promise.all([
       this.transactionRepository.create(transaction),
-      this.costumerRepository.updateBalance(costumer, value),
+      this.costumerRepository.updateBalance(costumer, debitValue),
     ])
 
     return {
