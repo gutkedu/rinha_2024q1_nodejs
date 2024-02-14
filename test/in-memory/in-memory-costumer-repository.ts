@@ -13,19 +13,14 @@ export class InMemoryCostumerRepository implements CostumerRepository {
       CostumerEntity.create({ id: '5', limit: 500000, balance: 0 }),
     ]
   }
-  async updateBalance(
-    costumer: CostumerEntity,
-    balance: number,
-  ): Promise<CostumerEntity> {
-    const findCostumer = this.items.find((item) => item.id === costumer.id)
+  async updateBalance(costumerId: string, balance: number): Promise<void> {
+    const findCostumer = this.items.find((item) => item.id === costumerId)
 
     if (!findCostumer) {
       throw new Error('Costumer not found')
     }
 
     findCostumer.balance = findCostumer.balance + balance
-
-    return costumer
   }
 
   async findById(costumerId: string): Promise<CostumerEntity> {

@@ -50,14 +50,17 @@ export class CreateDebitTxUseCase {
       id: ulid(),
     })
 
-    await Promise.all([
-      this.transactionRepository.create(transaction),
-      this.costumerRepository.updateBalance(costumer, debitValue),
-    ])
+    const newBalance = costumer.balance + debitValue
+
+    await this.transactionRepository.createTransactionAndUpdateBalance(
+      costumer.id,
+      newBalance,
+      transaction,
+    )
 
     return {
       limit: costumer.limit,
-      balance: costumer.balance,
+      balance: newBalance,
     }
   }
 }

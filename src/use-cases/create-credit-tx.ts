@@ -41,14 +41,17 @@ export class CreateCreditTxUseCase {
       id: ulid(),
     })
 
-    await Promise.all([
-      this.transactionRepository.create(transaction),
-      this.costumerRepository.updateBalance(costumer, value),
-    ])
+    const newBalance = costumer.balance + value
+
+    await this.transactionRepository.createTransactionAndUpdateBalance(
+      costumer.id,
+      newBalance,
+      transaction,
+    )
 
     return {
       limit: costumer.limit,
-      balance: costumer.balance,
+      balance: newBalance,
     }
   }
 }

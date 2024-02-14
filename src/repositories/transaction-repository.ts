@@ -5,4 +5,9 @@ export interface TransactionRepository {
   findLast10TransactionsByCostumerId(
     costumerId: string,
   ): Promise<TransactionEntity[]>
+  createTransactionAndUpdateBalance(
+    costumerId: string,
+    balance: number,
+    transaction: TransactionEntity,
+  ): Promise<void>
 }

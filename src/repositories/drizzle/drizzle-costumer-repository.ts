@@ -25,17 +25,10 @@ export class DrizzleCostumerRepository implements CostumerRepository {
 
     return CostumerEntity.create(costumer[0])
   }
-  async updateBalance(
-    costumer: CostumerEntity,
-    balance: number,
-  ): Promise<CostumerEntity> {
+  async updateBalance(costumerId: string, balance: number): Promise<void> {
     await this.db
       .update(costumerSchema)
-      .set({ balance: costumer.balance + balance })
-      .where(eq(costumerSchema.id, costumer.id))
-
-    costumer.balance += balance
-
-    return costumer
+      .set({ balance })
+      .where(eq(costumerSchema.id, costumerId))
   }
 }
