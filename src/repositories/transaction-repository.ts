@@ -4,5 +4,4 @@ export interface TransactionRepository {
   findLast10TransactionsByCostumerId(
     costumerId: number,
   ): Promise<TransactionEntity[]>
-  create(transaction: TransactionEntity): Promise<TransactionEntity>
 }

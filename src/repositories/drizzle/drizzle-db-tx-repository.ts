@@ -1,4 +1,3 @@
-import { TransactionEntity } from '@/core/entities/transaction'
 import { DbTxRepository } from '../db-tx-repository'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres/driver'
 import { db } from '@/app'
@@ -7,6 +6,7 @@ import {
   balanceSchema,
   transactionSchema,
 } from '@drizzle/schema/drizzle-schema'
+import { createTxAndUpdateCostumerBalanceDto } from '../dtos/db-tx-dtos'
 
 export class DrizzleDbTxRepository implements DbTxRepository {
   private db: NodePgDatabase
@@ -16,14 +16,10 @@ export class DrizzleDbTxRepository implements DbTxRepository {
   }
 
   async createTxAndUpdateCostumerBalance({
+    balanceValue,
     costumerId,
     tx,
-    balanceValue,
-  }: {
-    balanceValue: number
-    costumerId: number
-    tx: TransactionEntity
-  }): Promise<void> {
+  }: createTxAndUpdateCostumerBalanceDto): Promise<void> {
     try {
       await this.db.transaction(
         async (trx) => {

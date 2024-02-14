@@ -1,13 +1,7 @@
-import { TransactionEntity } from '@/core/entities/transaction'
+import { createTxAndUpdateCostumerBalanceDto } from './dtos/db-tx-dtos'
 
 export interface DbTxRepository {
-  createTxAndUpdateCostumerBalance({
-    costumerId,
-    tx,
-    balanceValue,
-  }: {
-    balanceValue: number
-    costumerId: number
-    tx: TransactionEntity
-  }): Promise<void>
+  createTxAndUpdateCostumerBalance(
+    payload: createTxAndUpdateCostumerBalanceDto,
+  ): Promise<void>
 }

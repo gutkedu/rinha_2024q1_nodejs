@@ -2,8 +2,6 @@ import { TransactionType } from '@/core/types/transaction-type'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { CostumerRepository } from '@/repositories/costumer-repository'
-import { BalanceRepository } from '@/repositories/balance-repository'
-import { TransactionRepository } from '@/repositories/transaction-repository'
 import { DbTxRepository } from '@/repositories/db-tx-repository'
 
 interface CreateCreditTxRequest {
@@ -20,8 +18,6 @@ interface CreateCreditTxResponse {
 export class CreateCreditTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
-    private readonly balanceRepository: BalanceRepository,
-    private readonly transactionRepository: TransactionRepository,
     private readonly dbTxRepository: DbTxRepository,
   ) {}
 
@@ -51,13 +47,6 @@ export class CreateCreditTxUseCase {
       tx: transaction,
       balanceValue: newBalance,
     })
-
-    /*     await this.transactionRepository.create(transaction)
-
-    await this.balanceRepository.updateBalanceByCostumerId(
-      costumer.id,
-      newBalance,
-    ) */
 
     return {
       limit: costumer.limit,

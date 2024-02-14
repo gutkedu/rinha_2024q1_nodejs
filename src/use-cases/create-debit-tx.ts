@@ -3,8 +3,6 @@ import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
-import { TransactionRepository } from '@/repositories/transaction-repository'
-import { BalanceRepository } from '@/repositories/balance-repository'
 import { DbTxRepository } from '@/repositories/db-tx-repository'
 
 interface CreateDebitTxRequest {
@@ -21,8 +19,6 @@ interface CreateDebitTxResponse {
 export class CreateDebitTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
-    private readonly balanceRepository: BalanceRepository,
-    private readonly transactionRepository: TransactionRepository,
     private readonly dbTxRepository: DbTxRepository,
   ) {}
 
@@ -60,13 +56,6 @@ export class CreateDebitTxUseCase {
       tx: transaction,
       balanceValue: newBalance,
     })
-
-    /*     await this.transactionRepository.create(transaction)
-
-    await this.balanceRepository.updateBalanceByCostumerId(
-      costumer.id,
-      newBalance,
-    ) */
 
     return {
       limit: costumer.limit,

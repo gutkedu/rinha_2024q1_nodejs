@@ -28,30 +28,13 @@ export class DrizzleTransactionRepository implements TransactionRepository {
         })
         .from(transactionSchema)
         .where(eq(transactionSchema.costumerId, costumerId))
-        .orderBy(desc(transactionSchema.id))
+        .orderBy(desc(transactionSchema.createdAt))
         .limit(10)
 
       return transactions.map(TransactionEntity.fromDatabase)
     } catch (error) {
       console.log(error)
       throw new IntegrationError('Error finding transactions.')
-    }
-  }
-
-  async create(transaction: TransactionEntity): Promise<TransactionEntity> {
-    try {
-      await this.db.insert(transactionSchema).values({
-        id: transaction.id,
-        costumerId: transaction.costumerId,
-        value: transaction.value,
-        transactionType: transaction.transactionType,
-        description: transaction.description,
-      })
-
-      return transaction
-    } catch (error) {
-      console.log(error)
-      throw new IntegrationError('Error creating transaction.')
     }
   }
 }

@@ -16,6 +16,10 @@ export class BalanceEntity extends Entity<BalanceProps> {
     return this.props.value
   }
 
+  set value(value: number) {
+    this.props.value = value
+  }
+
   static fromDatabase(input: BalanceSelect) {
     return new BalanceEntity(input)
   }

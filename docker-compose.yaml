@@ -19,7 +19,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.55'
+          cpus: '0.5'
           memory: '150MB'
   api02:
     <<: *api01
@@ -39,7 +39,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.15'
+          cpus: '0.10'
           memory: '50MB'
   postgres:
     image: bitnami/postgresql
@@ -56,7 +56,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.4'
           memory: '200MB'
 
 volumes:
