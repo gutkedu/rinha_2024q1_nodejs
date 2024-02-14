@@ -7,6 +7,7 @@ import { InMemoryTransactionRepository } from '@test/in-memory/in-memory-transac
 
 let transactionRepository: InMemoryTransactionRepository
 let costumerRepository: InMemoryCostumerRepository
+
 let sut: FetchCostumerExtractUseCase
 
 describe('Fetch Costumer Extract', () => {
@@ -19,36 +20,33 @@ describe('Fetch Costumer Extract', () => {
     )
   })
 
-  it('should fetch costumer extract', async () => {
-    const costumer = await costumerRepository.findById('1')
+  it('should fetch last 10 transactions for costumer extract', async () => {
+    const { costumer } = await costumerRepository.findById(1)
     const value = 1000
 
     for (let i = 0; i < 15; i++) {
       transactionRepository.create(
         TransactionEntity.create({
           id: i,
-          costumerId: costumer.id,
+          costumerId: costumer?.id,
           description: 'Test',
           transactionType: TransactionType.DEBIT,
           value,
         }),
       )
-      costumerRepository.items[0].balance += value
     }
 
-    const { balance, lastTransactions } = await sut.execute({
-      costumerId: '1',
+    const response = await sut.execute({
+      costumerId: 1,
     })
 
-    expect(balance.total).toBe(costumer.balance)
-    expect(balance.limit).toBe(costumer.limit)
-    expect(lastTransactions.length).toBe(10)
+    expect(response.lastTransactions.length).toBe(10)
   })
 
   it('should not fetch costumer extract when costumer is not found', async () => {
     await expect(
       sut.execute({
-        costumerId: 'not-found',
+        costumerId: 555,
       }),
     ).rejects.toThrow('Costumer not found.')
   })

@@ -1,13 +1,13 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { CostumerRepository } from '@/repositories/costumer-repository'
+import { DbTxRepository } from '@/repositories/db-tx-repository'
 
 interface CreateCreditTxRequest {
   value: number
   description: string
-  costumerId: string
+  costumerId: number
 }
 
 interface CreateCreditTxResponse {
@@ -18,7 +18,7 @@ interface CreateCreditTxResponse {
 export class CreateCreditTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
-    private readonly transactionRepository: TransactionRepository,
+    private readonly dbTxRepository: DbTxRepository,
   ) {}
 
   async execute({
@@ -26,9 +26,10 @@ export class CreateCreditTxUseCase {
     description,
     value,
   }: CreateCreditTxRequest): Promise<CreateCreditTxResponse> {
-    const costumer = await this.costumerRepository.findById(costumerId)
+    const { balance, costumer } =
+      await this.costumerRepository.findById(costumerId)
 
-    if (!costumer) {
+    if (!costumer || !balance) {
       throw new NotFoundError('Costumer not found.')
     }
 
@@ -39,13 +40,13 @@ export class CreateCreditTxUseCase {
       value,
     })
 
-    const newBalance = costumer.balance + value
+    const newBalance = balance.value + value
 
-    await this.transactionRepository.createTransactionAndUpdateBalance(
-      costumer.id,
-      newBalance,
-      transaction,
-    )
+    await this.dbTxRepository.createTxAndUpdateCostumerBalance({
+      costumerId: costumer.id,
+      tx: transaction,
+      balanceValue: newBalance,
+    })
 
     return {
       limit: costumer.limit,

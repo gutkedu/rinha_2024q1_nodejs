@@ -1,14 +1,14 @@
 import { TransactionType } from '@/core/types/transaction-type'
-import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
+import { DbTxRepository } from '@/repositories/db-tx-repository'
 
 interface CreateDebitTxRequest {
   value: number
   description: string
-  costumerId: string
+  costumerId: number
 }
 
 interface CreateDebitTxResponse {
@@ -19,7 +19,7 @@ interface CreateDebitTxResponse {
 export class CreateDebitTxUseCase {
   constructor(
     private readonly costumerRepository: CostumerRepository,
-    private readonly transactionRepository: TransactionRepository,
+    private readonly dbTxRepository: DbTxRepository,
   ) {}
 
   async execute({
@@ -27,13 +27,14 @@ export class CreateDebitTxUseCase {
     description,
     value,
   }: CreateDebitTxRequest): Promise<CreateDebitTxResponse> {
-    const costumer = await this.costumerRepository.findById(costumerId)
+    const { balance, costumer } =
+      await this.costumerRepository.findById(costumerId)
 
-    if (!costumer) {
+    if (!costumer || !balance) {
       throw new NotFoundError('Costumer not found.')
     }
 
-    const isInconsistentBalance = costumer.balance - value < -costumer.limit
+    const isInconsistentBalance = balance.value - value < -costumer.limit
 
     if (isInconsistentBalance) {
       throw new InconsistentBalanceError('Limit exceeded.')
@@ -48,13 +49,13 @@ export class CreateDebitTxUseCase {
       value: debitValue,
     })
 
-    const newBalance = costumer.balance + debitValue
+    const newBalance = balance.value - value
 
-    await this.transactionRepository.createTransactionAndUpdateBalance(
-      costumer.id,
-      newBalance,
-      transaction,
-    )
+    await this.dbTxRepository.createTxAndUpdateCostumerBalance({
+      costumerId: costumer.id,
+      tx: transaction,
+      balanceValue: newBalance,
+    })
 
     return {
       limit: costumer.limit,
