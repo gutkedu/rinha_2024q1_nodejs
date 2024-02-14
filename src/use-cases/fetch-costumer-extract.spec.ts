@@ -26,7 +26,7 @@ describe('Fetch Costumer Extract', () => {
     for (let i = 0; i < 15; i++) {
       transactionRepository.create(
         TransactionEntity.create({
-          id: i.toString(),
+          id: i,
           costumerId: costumer.id,
           description: 'Test',
           transactionType: TransactionType.DEBIT,

@@ -35,9 +35,9 @@ export class FetchCostumerExtractUseCase {
       throw new NotFoundError('Costumer not found.')
     }
 
-    const lastTransactions =
+    const last10Transactions =
       await this.transactionRepository.findLast10TransactionsByCostumerId(
-        costumerId,
+        costumer.id,
       )
 
     return {
@@ -46,13 +46,11 @@ export class FetchCostumerExtractUseCase {
         extractDate: new Date().toISOString(),
         limit: costumer.limit,
       },
-      lastTransactions: lastTransactions.map((transaction) => ({
-        value: transaction.value,
-        transactionType: transaction.transactionType ?? '',
-        description: transaction.description ?? '',
-        createdAt: transaction.createdAt
-          ? transaction.createdAt.toISOString()
-          : '',
+      lastTransactions: last10Transactions.map((transaction) => ({
+        value: transaction.value as number,
+        transactionType: transaction.transactionType as string,
+        description: transaction.description as string,
+        createdAt: transaction?.createdAt?.toISOString() as string,
       })),
     }
   }

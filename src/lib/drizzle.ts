@@ -28,5 +28,5 @@ export async function startDatabase() {
 
   const db = drizzle(pool)
 
-  return db
+  return { db, pool }
 }

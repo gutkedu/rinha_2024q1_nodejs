@@ -10,7 +10,7 @@
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
-    "lint": "eslint src --ext .ts .",
+    "lint": "eslint '*.ts' . --quiet --fix",
     "lint:fix": "eslint src --ext .ts --fix",
     "prebuild": "tsc --noEmit",
     "build": "tsup --config tsup.config.ts",
@@ -41,7 +41,6 @@
     "drizzle-orm": "0.29.3",
     "fastify": "^4.26.0",
     "pg": "8.11.3",
-    "ulid": "2.3.0",
     "zod": "^3.22.4"
   }
 }

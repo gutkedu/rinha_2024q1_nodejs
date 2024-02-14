@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "costumers" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "transactions" (
-	"id" varchar PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"costumerId" varchar,
 	"value" integer DEFAULT 0 NOT NULL,
 	"transactionType" varchar,

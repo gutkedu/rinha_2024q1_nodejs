@@ -2,7 +2,6 @@ import { TransactionType } from '@/core/types/transaction-type'
 import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
-import { ulid } from 'ulid'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 import { InconsistentBalanceError } from './errors/inconsistent-balance-error'
 
@@ -47,7 +46,6 @@ export class CreateDebitTxUseCase {
       description,
       transactionType: TransactionType.DEBIT,
       value: debitValue,
-      id: ulid(),
     })
 
     const newBalance = costumer.balance + debitValue

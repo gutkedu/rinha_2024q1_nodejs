@@ -27,13 +27,6 @@ services:
       - '3334:3333'
     environment:
       PORT: 3334
-      DB_HOST: 'postgres'
-      DB_PORT: '5432'
-      NODE_ENV: 'production'
-      DB_USER: 'docker'
-      DB_PASSWORD: 'docker'
-      DB_NAME: 'rinha_api'
-
   nginx:
     image: nginx:latest
     volumes:

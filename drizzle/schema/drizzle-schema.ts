@@ -5,12 +5,13 @@ import {
   pgTable,
   timestamp,
   varchar,
+  serial,
 } from 'drizzle-orm/pg-core'
 
 export const transactionSchema = pgTable(
   'transactions',
   {
-    id: varchar('id').primaryKey(),
+    id: serial('id').primaryKey(),
     costumerId: varchar('costumerId').references(() => costumerSchema.id),
     value: integer('value').default(0).notNull(),
     transactionType: varchar('transactionType'),

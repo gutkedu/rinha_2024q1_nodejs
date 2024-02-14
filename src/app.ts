@@ -10,7 +10,7 @@ export const app = fastify()
 
 app.register(transactionRoutes)
 
-export const db = await startDatabase()
+export const { db, pool } = await startDatabase()
 
 app.setErrorHandler((error, _request, reply) => {
   if (error instanceof ZodError) {

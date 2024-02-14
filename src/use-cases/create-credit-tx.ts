@@ -2,7 +2,6 @@ import { TransactionType } from '@/core/types/transaction-type'
 import { TransactionRepository } from '@/repositories/transaction-repository'
 import { NotFoundError } from './errors/not-found-error'
 import { TransactionEntity } from '@/core/entities/transaction'
-import { ulid } from 'ulid'
 import { CostumerRepository } from '@/repositories/costumer-repository'
 
 interface CreateCreditTxRequest {
@@ -38,7 +37,6 @@ export class CreateCreditTxUseCase {
       description,
       transactionType: TransactionType.CREDIT,
       value,
-      id: ulid(),
     })
 
     const newBalance = costumer.balance + value

@@ -22,7 +22,7 @@ export async function fetchCostumerExtractController(
   reply: FastifyReply,
 ) {
   const fetchCostumerExtractParamsSchema = z.object({
-    id: z.string(),
+    id: z.coerce.number().int().nonnegative(),
   })
 
   const { id: costumerId } = fetchCostumerExtractParamsSchema.parse(
@@ -32,7 +32,7 @@ export async function fetchCostumerExtractController(
   const useCase = makeFetchCostumerExtractUseCase()
 
   const { balance, lastTransactions } = await useCase.execute({
-    costumerId,
+    costumerId: costumerId.toString(),
   })
 
   reply.status(200).send({

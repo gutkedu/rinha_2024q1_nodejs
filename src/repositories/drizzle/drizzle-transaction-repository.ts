@@ -19,7 +19,7 @@ export class DrizzleTransactionRepository implements TransactionRepository {
   async create(data: TransactionEntity): Promise<TransactionEntity> {
     try {
       await this.db.insert(transactionSchema).values({
-        id: data.id,
+        id: transactionSchema.id.default,
         costumerId: data.costumerId,
         description: data.description,
         transactionType: data.transactionType,
@@ -47,7 +47,7 @@ export class DrizzleTransactionRepository implements TransactionRepository {
         })
         .from(transactionSchema)
         .where(eq(transactionSchema.costumerId, costumerId))
-        .orderBy(desc(transactionSchema.createdAt))
+        .orderBy(desc(transactionSchema.id))
         .limit(10)
 
       return transactions.map(TransactionEntity.fromDatabase)
@@ -64,18 +64,25 @@ export class DrizzleTransactionRepository implements TransactionRepository {
   ): Promise<void> {
     try {
       await this.db.transaction(async (tx) => {
-        await tx.insert(transactionSchema).values({
-          id: transaction.id,
-          costumerId: transaction.costumerId,
-          description: transaction.description,
-          transactionType: transaction.transactionType,
-          value: transaction.value,
-        })
+        await tx
+          .select()
+          .from(costumerSchema)
+          .where(eq(costumerSchema.id, costumerId))
+          .for('update')
 
         await tx
           .update(costumerSchema)
           .set({ balance })
           .where(eq(costumerSchema.id, costumerId))
+          .execute()
+
+        await tx.insert(transactionSchema).values({
+          id: transactionSchema.id.default,
+          costumerId: transaction.costumerId,
+          description: transaction.description,
+          transactionType: transaction.transactionType,
+          value: transaction.value,
+        })
       })
     } catch (error) {
       console.log(error)
