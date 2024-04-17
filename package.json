@@ -37,7 +37,7 @@
     "vitest": "^1.2.2"
   },
   "dependencies": {
-    "dotenv": "16.4.2",
+    "dotenv": "16.4.5",
     "drizzle-orm": "0.29.3",
     "fastify": "^4.26.0",
     "pg": "8.11.3",
